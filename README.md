@@ -4,19 +4,19 @@
 
 ## 界面预览
 
-**研究工作台**：围绕论文问答、Agent 研究与单试次分析组织任务。
+以下截图来自 2026 年 11 月 12 日的界面验收，展示移动端视图和示例数据；功能是否可用取决于本地配置与模型文件。
 
-![研究工作台](docs/screenshots/workbench.jpg)
+**脑电数据登记**：在研究对话中登记样本，并查看数据形状、采样率与适配情况。
 
-**知识库资料**：上传资料并查看导入、解析和索引状态。
+![脑电数据登记](docs/screenshots/eeg-registration.jpg)
 
-![知识库导入](docs/screenshots/knowledge-import.jpg)
+**Agent 研究**：基于已登记的样本执行模型分析并查看结果。
 
-**研究账号**：首次使用时设置本地研究账号。
+![Agent 模型分析](docs/screenshots/agent-inference.jpg)
 
-![研究账号设置](docs/screenshots/account-setup.png)
+**预处理 Skills**：查看模型对应的预处理能力与适用条件。
 
-以上为项目开发期间保存的界面截图，展示示例状态，具体内容取决于本地配置和数据。
+![预处理能力](docs/screenshots/preprocessing-skills.jpg)
 
 ## 功能
 
