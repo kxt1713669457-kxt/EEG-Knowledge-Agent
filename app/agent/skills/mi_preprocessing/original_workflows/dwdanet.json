@@ -1,0 +1,580 @@
+{
+  "audit": {
+    "checked_at_utc": "2026-11-12T06:34:12.743599+00:00",
+    "read_only_source_audit": true,
+    "normalization_helper_ast_identical_in_five_sources": true,
+    "training_rerun": false,
+    "checkpoint_conversion_or_registration": false
+  },
+  "contract_kind": "discoverable original input, split and normalization-stage contract; no implicit source-pool fitting",
+  "shared_preprocessing_facts": {
+    "algorithm_difference_between_families": "No evidence of a different raw-signal preprocessing algorithm. A/B share the original GDF cue-window scripts; C shares the original SHU MAT assembly scripts.",
+    "software_filter_added": null,
+    "software_rereference_added": null,
+    "software_resample_added": null,
+    "classification_normalization_in_preprocessing": false,
+    "eeg_channel_order": "Preserve recorded/stored order; never fabricate a channel map or reduce another dataset to 22 channels.",
+    "event_label_separation": "Cue locations define windows. True class labels may be exported for dataset reproduction/evaluation, never used as signal input or to fit inference-time cleaning.",
+    "raw_script_execution": "Implement bounded, validated adapters; do not import/run original scripts with top-level loops that overwrite data."
+  },
+  "datasets": {
+    "BCI_IV_2a": {
+      "dataset_type": "A",
+      "expected_subjects": 9,
+      "eeg_channels": 22,
+      "sampling_rate_hz": 250,
+      "points_per_trial": 1000,
+      "input_kind": "continuous GDF",
+      "current_local_raw_directory": "F:\\dwt实验\\dwdanet\\BCICIV_2a_gdf",
+      "current_local_trial_directory": "F:\\dwt实验\\dwdanet\\mymat_raw",
+      "source_script": {
+        "path": "F:\\dwt实验\\dwdanet\\preprocessing_for_2a.py",
+        "sha256": "1595fecf684d0b1b03c5ff395f11f03b6f5ad4f5d7ceab48cb8605af1cba13ea",
+        "locator": {
+          "kind": "python",
+          "lines": [
+            33,
+            65
+          ]
+        },
+        "inspection": "read and parsed only; never imported or executed training source"
+      },
+      "window": {
+        "anchor": "original cue annotation",
+        "train_codes": [
+          769,
+          770,
+          771,
+          772
+        ],
+        "evaluation_codes": [
+          783
+        ],
+        "tmin_seconds": 0,
+        "mne_inclusive_tmax_seconds": 3.996,
+        "equivalent_exclusive_end_seconds": 4,
+        "baseline": null,
+        "unit": "V",
+        "dtype_before_model_normalization": "float64"
+      },
+      "exclude_eog": [
+        "EOG-left",
+        "EOG-central",
+        "EOG-right"
+      ],
+      "reference": "original recorded reference, no added CAR",
+      "acquisition_processing": "Preserve hardware/file preprocessing. Absence of extra software filtering is not a claim that the acquired EEG was unfiltered.",
+      "artifact_marked_trials": "The original script does not explicitly reject numeric annotation 1023; MNE BAD-annotation handling is a separate mechanism.",
+      "label_sidecars": {
+        "directory": "F:\\dwt实验\\dwdanet\\true_labels",
+        "pattern": "AxxT.mat / AxxE.mat",
+        "variable": "classlabel",
+        "mapping": {
+          "1": "left_hand",
+          "2": "right_hand",
+          "3": "both_feet",
+          "4": "tongue"
+        },
+        "cue_783_is_not_a_class": true
+      },
+      "assembled_split": {
+        "T": "AxxT session",
+        "E": "AxxE session",
+        "no_trial_shuffle_at_export": true
+      },
+      "existing_registered_classifier": "Only the current 2a model-1 manifest is registered; shape compatibility is not a new-subject accuracy claim."
+    },
+    "BCI_IV_2b": {
+      "dataset_type": "B",
+      "expected_subjects": 9,
+      "eeg_channels": 3,
+      "sampling_rate_hz": 250,
+      "points_per_trial": 1000,
+      "input_kind": "continuous per-session GDF",
+      "current_local_raw_directory": "F:\\dwt实验\\dwdanet\\BCICIV_2b_gdf",
+      "current_local_trial_directory": "F:\\dwt实验\\dwdanet\\mymat_withoutFilter",
+      "source_script": {
+        "path": "F:\\dwt实验\\dwdanet\\preprocessing_for_2b.py",
+        "sha256": "17c3b7a93a3441b5a496e7c1538e47834f429ddca6c1f9506429243c51d52126",
+        "locator": {
+          "kind": "python",
+          "lines": [
+            11,
+            76
+          ]
+        },
+        "inspection": "read and parsed only; never imported or executed training source"
+      },
+      "window": {
+        "anchor": "original cue annotation",
+        "train_codes": [
+          769,
+          770
+        ],
+        "evaluation_codes": [
+          783
+        ],
+        "tmin_seconds": 0,
+        "mne_inclusive_tmax_seconds": 3.996,
+        "equivalent_exclusive_end_seconds": 4,
+        "baseline": null,
+        "unit": "V",
+        "dtype_before_model_normalization": "float64"
+      },
+      "eeg_order": [
+        "EEG:C3",
+        "EEG:Cz",
+        "EEG:C4"
+      ],
+      "exclude_eog": [
+        "EOG:ch01",
+        "EOG:ch02",
+        "EOG:ch03"
+      ],
+      "reference": "preserve the three recorded bipolar EEG signals; no added CAR",
+      "assembled_split": {
+        "T": "sessions 1,2,3 in order, from Bxx01T/Bxx02T/Bxx03T.gdf",
+        "E": "sessions 4,5 in order, from Bxx04E/Bxx05E.gdf"
+      },
+      "label_sidecars": {
+        "directory": "F:\\dwt实验\\dwdanet\\true_labels",
+        "variable": "classlabel",
+        "mapping": {
+          "1": "left_hand",
+          "2": "right_hand"
+        },
+        "cue_783_is_not_a_class": true
+      },
+      "registered_classifier_available": false,
+      "checkpoint_boundary": "Legacy B checkpoint candidates exist but exact family/architecture/normalization lineage is not verified; never auto-register them or use 22-channel A weights."
+    },
+    "SHU_MI": {
+      "dataset_type": "C",
+      "expected_subjects": 25,
+      "eeg_channels": 32,
+      "sampling_rate_hz": 250,
+      "points_per_trial": 1000,
+      "input_kind": "authors preprocessed 4-second epoched session MAT, not uncut continuous EEG",
+      "current_local_trial_directory": "F:\\dwt实验\\dwdanet\\mymat_shuMi",
+      "source_session_pattern": "sub-xxx_ses-xx_task_motorimagery_eeg.mat",
+      "source_variables": {
+        "data": "[trial,32,1000]",
+        "labels": "[1,trial] or [trial,1]"
+      },
+      "source_numeric_dtype": "float32",
+      "source_numeric_unit": "uV",
+      "unit_basis": "Author public channels.tsv for the same SHU release declares microV; the MAT arrays themselves have no embedded unit field. Never infer units from signal amplitude.",
+      "official_sources": {
+        "paper": "https://www.nature.com/articles/s41597-022-01647-1",
+        "dataset_doi": "https://doi.org/10.6084/m9.figshare.19228725.v1",
+        "channels_tsv": "https://ndownloader.figshare.com/files/34166154",
+        "eeg_json": "https://ndownloader.figshare.com/files/34166160",
+        "events_json": "https://ndownloader.figshare.com/files/34166166"
+      },
+      "author_preprocessing_already_applied": [
+        "bad-segment rejection",
+        "baseline removal",
+        "0.5-40Hz FIR bandpass",
+        "4-second MI epoching"
+      ],
+      "author_acquisition_metadata": {
+        "sampling_rate_hz": 250,
+        "eeg_channels": 32,
+        "eog_channels": 0,
+        "reference": "M1",
+        "ground": "AFz"
+      },
+      "no_continuous_reconstruction": true,
+      "label_mapping": {
+        "1": "left_hand",
+        "2": "right_hand"
+      },
+      "export_mat": {
+        "patterns": [
+          "CxxT.mat",
+          "CxxE.mat"
+        ],
+        "variables": {
+          "data": "float32 [trial,32,1000]",
+          "label": "int64 [trial,1]"
+        },
+        "unit": "uV",
+        "preserve_original_numeric_values": true,
+        "fit_normalization_at_export": false
+      },
+      "inference_sample_export": {
+        "unit": "V",
+        "conversion": "explicit source uV * 1e-6 exactly once",
+        "classification_normalization": "Deferred to a specific compatible C model adapter; no A-model statistics."
+      },
+      "split_options": {
+        "direct_sessions_1_4_vs_5": {
+          "source_script": {
+            "path": "F:\\dwt实验\\dwdanet\\preprocessing_for_shuMi_direct.py",
+            "sha256": "9caa3611062a585a64fd3c0f4bf5d2665bcec4d9e62cb56ab5e71bee5282f018",
+            "locator": {
+              "kind": "python",
+              "lines": [
+                56,
+                68,
+                106,
+                155,
+                158,
+                217
+              ]
+            },
+            "inspection": "read and parsed only; never imported or executed training source"
+          },
+          "train_sessions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "test_sessions": [
+            5
+          ],
+          "order": "session ascending, preserve trial order",
+          "allow_missing_default": false,
+          "verified_current_subjects": [
+            1,
+            2
+          ],
+          "numeric_verification": [
+            {
+              "subject": 1,
+              "train_shape": [
+                398,
+                32,
+                1000
+              ],
+              "test_shape": [
+                94,
+                32,
+                1000
+              ],
+              "train_session_counts": [
+                100,
+                100,
+                99,
+                99
+              ],
+              "all_values_and_labels_equal": true
+            },
+            {
+              "subject": 2,
+              "train_shape": [
+                387,
+                32,
+                1000
+              ],
+              "test_shape": [
+                95,
+                32,
+                1000
+              ],
+              "train_session_counts": [
+                92,
+                95,
+                100,
+                100
+              ],
+              "all_values_and_labels_equal": true
+            }
+          ],
+          "verification_boundary": "Only current C01/C02 compared value-by-value against the five session MATs; remaining 23 subjects and historical checkpoint inputs are not certified."
+        },
+        "mixed_sessions_stratified_70_30": {
+          "source_script": {
+            "path": "F:\\dwt实验\\dwdanet\\preprocessing_for_shuMi_no_cross_session.py",
+            "sha256": "326ccba479e6ed2c6cafc249e71cd714d2886dc29c973f0dc1d0b07dea66abc5",
+            "locator": {
+              "kind": "python",
+              "lines": [
+                40,
+                50,
+                159,
+                230
+              ]
+            },
+            "inspection": "read and parsed only; never imported or executed training source"
+          },
+          "sessions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "test_ratio": 0.3,
+          "rng": "numpy.random.RandomState",
+          "base_seed": 2026,
+          "subject_seed": "2026 + subject_id",
+          "algorithm": "Concatenate five sessions. For each sorted class, shuffle indices; n_test=round(class_count*0.30), clamp 1..class_count-1. Take first n_test as test; shuffle final train/test index arrays.",
+          "cross_session_boundary": "Despite filename no_cross_session, code mixes all five sessions before a trial-level split. This is not a held-out-session protocol.",
+          "current_C01_C02_match": false,
+          "historical_checkpoint_split": "not verified"
+        }
+      },
+      "registered_classifier_available": false,
+      "checkpoint_split_lineage": "Training scripts only read CxxT/CxxE. They do not record which producer wrote those names. Current file equality does not establish historical checkpoint lineage."
+    }
+  },
+  "normalization": {
+    "runtime_policy": "Original-workflow preprocessing does not refit a source pool. The specific model adapter applies compatible frozen training statistics once.",
+    "default_training_DG_recipe": {
+      "applies_to": [
+        "A: 22 channels",
+        "B: 3 channels",
+        "C: 32 channels"
+      ],
+      "reshape": "[N,C,1000] -> [N,1,C,1000]",
+      "cast_before_statistics": "astype(numpy.float32)",
+      "fit_array": "concatenate all declared source-domain arrays along axis=0",
+      "mean": "float(np.mean(all_src))",
+      "std": "float(np.std(all_src) + 1e-8)",
+      "axes": "axis=None: one global scalar across trials, singleton axis, channels and time",
+      "ddof": 0,
+      "numpy_reduction_dtype": "float32 default accumulation for float32 input; no dtype=float64 override in original source",
+      "eps_expression": "1e-8 added to std (not variance); NumPy scalar-promotion/version can affect last-bit rounding",
+      "apply": "(x - source_mean) / source_std for every source domain and held-out target",
+      "not_per_channel_or_per_trial": true,
+      "source_helpers_ast_identical": true,
+      "evidence": [
+        {
+          "path": "F:\\dwt实验\\dwdanet\\main_cross_subject_LOSO_dynamic_weight_patched.ipynb",
+          "sha256": "869297c08c05cc4582b4a825f41bff566bc116a03d1a62a9213dad3e8381b68a",
+          "locator": {
+            "kind": "notebook_code_cell_0",
+            "lines": [
+              1023,
+              1033
+            ]
+          },
+          "inspection": "read and parsed only; never imported or executed training source"
+        },
+        {
+          "path": "F:\\dwt实验\\dwdanet\\main_subject_specific_multiscale_stage2_dg_dwtaug_v4align_no_proto.py",
+          "sha256": "801405c21f50d9a7fbae60185d39aed71e28dc5c761e40b32c955b94e84eca21",
+          "locator": {
+            "kind": "python",
+            "lines": [
+              1221,
+              1231
+            ]
+          },
+          "inspection": "read and parsed only; never imported or executed training source"
+        },
+        {
+          "path": "F:\\dwt实验\\dwdanet\\main_shuMi_subject_dependent_LOSO.py",
+          "sha256": "51cc97f26321178076797af62d5a7be1787a30b6f48ab38bbb51e8afae340ac4",
+          "locator": {
+            "kind": "python",
+            "lines": [
+              1023,
+              1033
+            ]
+          },
+          "inspection": "read and parsed only; never imported or executed training source"
+        },
+        {
+          "path": "F:\\dwt实验\\dwdanet\\main_shuMi_subject_dependent_earlystop.py",
+          "sha256": "f3e5939501bc08d508cd6c5e9248836758443071217f2d3d7a6ddaa1b0790d2c",
+          "locator": {
+            "kind": "python",
+            "lines": [
+              1023,
+              1033
+            ]
+          },
+          "inspection": "read and parsed only; never imported or executed training source"
+        },
+        {
+          "path": "F:\\dwt实验\\dwdanet\\main_dwt_with_shu_mi_option_final.py",
+          "sha256": "38b9db1fcb50aea3265073cd206a42f78847bc70ab9903739196a9151757de9e",
+          "locator": {
+            "kind": "python",
+            "lines": [
+              1299,
+              1309
+            ]
+          },
+          "inspection": "read and parsed only; never imported or executed training source"
+        }
+      ]
+    },
+    "fit_scope_by_evaluation": {
+      "LOSO": {
+        "dataset_loader": {
+          "path": "F:\\dwt实验\\dwdanet\\utils.py",
+          "sha256": "017d61265d6d306f8e4920faadeb1a4f9a84457aa96898391d8302f6584b3619",
+          "locator": {
+            "kind": "python",
+            "lines": [
+              26,
+              35,
+              68,
+              90,
+              95,
+              110,
+              114,
+              183,
+              186,
+              216,
+              297,
+              313
+            ]
+          },
+          "inspection": "read and parsed only; never imported or executed training source"
+        },
+        "source": "For each available source subject, concatenate that subject T and E. Exclude the selected target subject entirely from source mean/std fitting.",
+        "target": "Selected target subject T+E, normalized with source statistics. Expected other subjects=8 for A/B or24 for C when all files are present.",
+        "original_E_files_in_source_pool": true,
+        "held_out_target_subject_in_normalization_fit": false
+      },
+      "subject_dependent_DG": {
+        "source": "Only selected subject T; split into three class-balanced pseudo-domains, then concatenate pseudo-domains for global mean/std.",
+        "target": "Selected subject E; not used for mean/std fitting.",
+        "E_in_normalization_fit": false
+      },
+      "single_source_when_use_dg_false": {
+        "recipe": "get_source_data computes np.mean/np.std on complete loaded training array, no dtype cast before statistics and no epsilon; applies these to train/test.",
+        "dtype": "inherits stored data: A/B float64, C float32",
+        "epsilon": 0,
+        "do_not_silently_substitute_for_default_DG": true
+      }
+    },
+    "unit_contract": "For a V-valued inference sample whose model was trained in uV, the specific adapter must reconcile the frozen statistics and original training units (or explicitly restore uV) before normalizing once. Do not blindly reuse uV means/std as V stats.",
+    "current_registered_2a_reconstruction": {
+      "mean": 3.2454619503984543e-07,
+      "std": 1.1501132518593401e-05,
+      "unit": "V",
+      "held_out_subject": 1,
+      "source_subjects": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "source_sessions": [
+        "T",
+        "E"
+      ],
+      "implementation": "prepare_local_eeg_skills.py uses float64 streamed sums/squares over current MAT source pool; this differs from original float32 concatenate/reduce.",
+      "status": "reconstructed_source_pool, not saved exact historical training statistics",
+      "not_valid_for_other_folds_or_B_C": true
+    }
+  },
+  "evaluation_boundaries": {
+    "target_data_unseen_claim_not_supported": "Default DG/DA training builds target_dataloader from held-out test_data, and uses target signals for adaptation. Target is excluded from normalization fit, not from all training-time access.",
+    "checkpoint_selection": "Default multi-source loops select best checkpoint by test_acc; target labels therefore influence checkpoint selection. Do not report this as a strictly untouched-target test protocol.",
+    "inference_output": "A single prediction is not generalization accuracy, clean-signal ground truth or proof that a new preprocessing profile improves the model."
+  },
+  "source_path_boundaries": {
+    "A_entry_literal": "../mymat_raw/",
+    "B_entry_literal": "./mymat_withoutFilter/",
+    "C_entry_legacy_literal": "D:\\Desktop\\project\\CTNet-main\\mymat_shuMi",
+    "current_evidence_directory": "F:\\dwt实验\\dwdanet",
+    "caveat": "Original training working directory is not captured. Relative paths are cwd-dependent; the D: legacy path is absent after relocation. Current local directories are read-only audited copies, not a claim about the old launch cwd."
+  },
+  "unassigned_legacy_checkpoint_candidates": [
+    {
+      "path": "F:\\dwt实验\\dwdanet\\B_heads_2_depth_6\\model_1.pth",
+      "exists": true,
+      "family_lineage": "not verified",
+      "registered": false
+    },
+    {
+      "path": "F:\\dwt实验\\dwdanet\\Loso_B_heads_2_depth_6_1\\model_1.pth",
+      "exists": true,
+      "family_lineage": "not verified",
+      "registered": false
+    },
+    {
+      "path": "F:\\dwt实验\\dwdanet\\SHU_MI_C_subject_dependent_heads_2_depth_6\\model_1.pth",
+      "exists": true,
+      "family_lineage": "not verified",
+      "split_and_frozen_statistics": "not verified",
+      "registered": false
+    }
+  ],
+  "schema_version": 1,
+  "family": "dwdanet",
+  "id": "dwdanet-original-v1",
+  "title": "DWDaNet原始输入与数据集处理流程",
+  "primary_training_source": {
+    "path": "F:\\dwt实验\\dwdanet\\main_cross_subject_LOSO_dynamic_weight_patched.ipynb",
+    "sha256": "869297c08c05cc4582b4a825f41bff566bc116a03d1a62a9213dad3e8381b68a",
+    "locator": {
+      "kind": "notebook_code_cell_0",
+      "lines": [
+        853,
+        891,
+        1023,
+        1033,
+        1057,
+        1080,
+        1137,
+        1154,
+        1173,
+        1338,
+        1768,
+        1794
+      ]
+    },
+    "inspection": "read and parsed only; never imported or executed training source"
+  },
+  "dataset_specific_training_sources": [
+    {
+      "path": "F:\\dwt实验\\dwdanet\\main_shuMi_subject_dependent_LOSO.py",
+      "sha256": "51cc97f26321178076797af62d5a7be1787a30b6f48ab38bbb51e8afae340ac4",
+      "locator": {
+        "kind": "python",
+        "lines": [
+          1023,
+          1033,
+          1802,
+          1808,
+          1832
+        ]
+      },
+      "inspection": "read and parsed only; never imported or executed training source"
+    },
+    {
+      "path": "F:\\dwt实验\\dwdanet\\main_shuMi_subject_dependent_earlystop.py",
+      "sha256": "f3e5939501bc08d508cd6c5e9248836758443071217f2d3d7a6ddaa1b0790d2c",
+      "locator": {
+        "kind": "python",
+        "lines": [
+          1023,
+          1033,
+          1802,
+          1808,
+          1832
+        ]
+      },
+      "inspection": "read and parsed only; never imported or executed training source"
+    }
+  ],
+  "registered_2a_checkpoint": {
+    "path": "F:\\dwt实验\\dwdanet\\Loso_A_heads_2_depth_6_dynamic_weight\\model_1.pth",
+    "sha256": "f8f3a48ce51dcccae28e4a02465cccc768fd10cd48132d060f6c6b1b9ce3fe45",
+    "model_manifest": "app/agent/skills/catalog/dwdanet-2a-local.json"
+  },
+  "training_augmentation": {
+    "kind": "same-class segmentation and recombination (S&R)",
+    "train_only": true,
+    "apply_at_inference": false,
+    "dwt_in_primary_source": false,
+    "boundary": "Do not invent a DWDaNet-specific raw filter or DWT preprocessing stage."
+  },
+  "runtime_dispatch": {
+    "A_B": "shared identity cue4s GDF adapter, no extra software filter/CAR",
+    "C": "dedicated epoched SHU five-session assembly, source-state marked preprocessed",
+    "normalization": "not applied here; once by compatible trained model adapter"
+  }
+}

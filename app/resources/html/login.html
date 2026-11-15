@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>登录 · EEG智库</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f6f1;color:#243c36;font:15px/1.6 system-ui,-apple-system,"Microsoft Yahei",sans-serif}button,input{font:inherit}button{cursor:pointer}main{min-height:100dvh;display:grid;grid-template-columns:1.05fr 1fr;max-width:1360px;margin:auto;padding:52px 64px;gap:70px;align-items:center}.brand{display:flex;align-items:center;gap:12px;font-size:21px;font-weight:650}.mark{display:grid;place-items:center;width:40px;height:44px;background:#225c4b;border-radius:13px;color:white}.eyebrow{color:#6a867a;font-size:11px;letter-spacing:.2em;margin:80px 0 22px}h1{font-size:clamp(32px,3.8vw,51px);font-weight:500;line-height:1.3;letter-spacing:-.04em;margin:0 0 24px}h1 span{color:#618064}.intro{max-width:360px;color:#78877c;line-height:1.9}.signal{width:100%;max-width:440px;margin:35px 0 18px;color:#8da87f}.features{font-size:12px;color:#82907f;letter-spacing:.1em}.card{background:#fffefb;border:1px solid #e1e6da;border-radius:22px;padding:40px;box-shadow:0 15px 60px #1f453708;max-width:450px;width:100%;justify-self:end}.card .eyebrow{margin:0 0 12px}h2{font-size:25px;line-height:1.3;font-weight:550;margin:0 0 12px}.subtitle{font-size:13px;color:#78877c;margin:0 0 28px}label{display:block;font-size:13px;margin:17px 0 7px}input{width:100%;background:#fff;border:1px solid #d9e0d2;border-radius:9px;padding:12px 13px;outline:none;color:#243c36}input:focus{border-color:#73956d;box-shadow:0 0 0 3px #8da87f18}.hint{font-size:11px;color:#7e8b7f;margin-top:6px}.password{position:relative}.password input{padding-right:65px}.peek{position:absolute;right:9px;top:9px;background:none;border:0;color:#6d8476;font-size:12px;padding:6px}.submit{display:block;width:100%;background:#295e4c;color:#fff;border:0;border-radius:9px;padding:12px;margin-top:25px}.submit:hover{background:#204c3c}button:disabled{opacity:.55;cursor:wait}.notice{min-height:24px;margin:12px 0 0;font-size:13px;color:#a04d3c}.footnote{border-top:1px solid #e8ece2;margin-top:24px;padding-top:18px;color:#8b9587;font-size:11px}.loading{color:#7b8b7b}button:focus-visible{outline:2px solid #73956d;outline-offset:3px}[hidden]{display:none!important}@media(max-width:760px){main{grid-template-columns:1fr;gap:28px;padding:26px 22px}.story .eyebrow,.story h1,.intro,.signal,.features{display:none}.card{justify-self:center;max-width:450px;padding:30px 25px}.brand{font-size:18px}}
+.auth-tabs{display:flex;gap:4px;padding:4px;background:#f0f3ec;border:1px solid #e5e9df;border-radius:10px;margin:0 0 26px}.auth-tabs button{flex:1;border:0;background:transparent;color:#7b8b7b;padding:8px 12px;border-radius:7px;font-size:13px}.auth-tabs button[aria-selected="true"]{background:#fffefb;color:#295e4c;box-shadow:0 1px 4px #243c360b;font-weight:600}.registration-closed{font-size:13px;color:#78877c;line-height:1.9;padding:6px 0}.back-login{margin-top:14px;border:1px solid #d9e0d2;background:#fffefb;color:#295e4c;border-radius:8px;padding:9px 16px}
+</style></head><body><main>
+<section class="story"><div class="brand"><span class="mark" aria-hidden="true">∿</span>EEG智库<span style="font-size:11px;font-weight:400;color:#8b9687;letter-spacing:.1em">NEURO RESEARCH</span></div><div class="eyebrow">YOUR RESEARCH, CONNECTED.</div><h1>让每一次探索，<br>都有<span>依据可循。</span></h1><p class="intro">连接文献、脑电信号与分析工具。回到你的研究空间，继续上一次思考。</p><svg class="signal" viewBox="0 0 440 66" fill="none" aria-hidden="true"><path d="M0 32H440M0 12H440M0 52H440" stroke="currentColor" opacity=".16"/><path d="M0 32H38l8-3 8 5 8-2h57l8-10 8 18 8-8h42l10-3 9-20 10 42 9-18h49l8-5 7 7 8-3h37l8-20 9 35 8-15h55" stroke="currentColor" stroke-width="1.6"/></svg><div class="features">文献解析 · AGENT 研究 · EEG SKILLS</div></section>
+<section class="card" aria-labelledby="loginTitle"><div class="eyebrow">PERSONAL WORKSPACE</div><div class="auth-tabs" id="authTabs" role="tablist" aria-label="账号入口" hidden><button type="button" id="loginTab" role="tab" aria-selected="true" aria-controls="authPanel">登录</button><button type="button" id="registerTab" role="tab" aria-selected="false" aria-controls="authPanel" tabindex="-1">注册</button></div><h2 id="loginTitle">正在连接研究空间</h2><p class="subtitle" id="subtitle">请稍候…</p>
+<div id="authPanel" role="tabpanel" aria-labelledby="loginTab">
+<form id="loginForm" hidden><label for="username">账号</label><input id="username" name="username" required minlength="3" maxlength="40" pattern="[A-Za-z0-9_.-]+" autocomplete="username" autocapitalize="none" spellcheck="false"><p class="hint" id="usernameHint" hidden>3–40 位英文字母、数字、下划线、点或短横线</p>
+<label for="password">密码</label><div class="password"><input id="password" name="password" type="password" required maxlength="128" autocomplete="current-password"><button class="peek" id="peek" type="button" aria-label="显示密码" aria-pressed="false">显示</button></div><p class="hint" id="passwordHint" hidden>至少 10 个字符，请使用独立密码。</p>
+<div id="confirmField" hidden><label for="confirmation">确认密码</label><input id="confirmation" type="password" maxlength="128" autocomplete="new-password"></div><button class="submit" id="submit" type="submit">登录</button></form>
+<div id="registrationClosed" class="registration-closed" hidden><p>当前个人工作台已注册账号，请使用已有账号登录。</p><button class="back-login" id="backLogin" type="button">返回登录</button></div></div>
+<p class="notice" id="notice" role="status" aria-live="polite"></p><button class="peek loading" id="retry" type="button" hidden style="position:static">重新连接</button><div class="footnote" id="footnote">此账号用于本机个人研究空间。已有论文、会话和分析产物会继续保留。</div></section>
+</main><script>
+(()=>{'use strict';const $=id=>document.getElementById(id);let setupRequired=false,busy=false,ready=false,mode='login';
+const wanted=new URLSearchParams(location.search).get('next');const next=['/html','/import/html','/'].includes(wanted)?(wanted==='/'?'/html':wanted):'/html';
+
+function showMode(value,{focus=true}={}){
+  if(!ready||busy)return;
+  mode=value;const registering=mode==='register',closed=registering&&!setupRequired;
+  for(const [id,selected]of [['loginTab',!registering],['registerTab',registering]]){
+    $(id).setAttribute('aria-selected',String(selected));$(id).tabIndex=selected?0:-1;
+  }
+  $('authPanel').setAttribute('aria-labelledby',registering?'registerTab':'loginTab');
+  $('loginTitle').textContent=registering?'创建研究账号':'欢迎回来';
+  $('subtitle').textContent=registering?(closed?'这个个人空间已有登录账号。':'注册后，进入你的个人研究空间。'):'登录后，继续你的文献与脑电研究。';
+  $('confirmField').hidden=!registering;$('confirmation').required=registering&&!closed;
+  $('usernameHint').hidden=!registering;$('passwordHint').hidden=!registering;
+  $('password').minLength=registering?10:1;$('password').autocomplete=registering?'new-password':'current-password';
+  $('password').value='';$('confirmation').value='';$('password').type='password';
+  $('peek').textContent='显示';$('peek').setAttribute('aria-label','显示密码');$('peek').setAttribute('aria-pressed','false');
+  $('submit').textContent=registering?'创建账号':'登录研究空间';$('notice').textContent='';
+  $('registrationClosed').hidden=!closed;$('loginForm').hidden=closed;
+  if(focus)(closed?$('backLogin'):$('username')).focus();
+}
+
+async function initialize(preferredMode='login'){
+  ready=false;$('retry').hidden=true;$('notice').textContent='';$('authTabs').hidden=true;$('loginForm').hidden=true;$('registrationClosed').hidden=true;
+  try{
+    const res=await fetch('/auth/status',{credentials:'include',signal:AbortSignal.timeout(7000)});if(!res.ok)throw Error();setupRequired=(await res.json()).setup_required===true;
+    if(!setupRequired){const me=await fetch('/auth/me',{credentials:'include',signal:AbortSignal.timeout(7000)});if(me.ok){location.replace(next);return;}}
+    ready=true;$('authTabs').hidden=false;showMode(preferredMode);
+  }catch(_){$('loginTitle').textContent='暂时无法连接';$('subtitle').textContent='确认后端服务启动后，再试一次。';$('retry').hidden=false;}
+}
+$('retry').addEventListener('click',()=>initialize());
+$('loginTab').addEventListener('click',()=>showMode('login'));
+$('registerTab').addEventListener('click',()=>showMode('register'));
+$('backLogin').addEventListener('click',()=>showMode('login'));
+$('authTabs').addEventListener('keydown',event=>{
+  if(!ready||busy||!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+  event.preventDefault();const target=event.key==='Home'?'login':event.key==='End'?'register':mode==='login'?'register':'login';
+  showMode(target,{focus:false});$(target==='login'?'loginTab':'registerTab').focus();
+});
+$('peek').addEventListener('click',()=>{const show=$('password').type==='password';$('password').type=show?'text':'password';$('peek').textContent=show?'隐藏':'显示';$('peek').setAttribute('aria-label',show?'隐藏密码':'显示密码');$('peek').setAttribute('aria-pressed',String(show));});
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(busy||!ready)return;
+  const registering=mode==='register';
+  if(!registering&&setupRequired){$('notice').textContent='还没有账号，请先点击“注册”创建账号。';$('registerTab').focus();return;}
+  if(registering&&!setupRequired)return;
+  if(registering&&$('password').value!==$('confirmation').value){$('notice').textContent='两次输入的密码不一致。';return;}
+  busy=true;for(const id of ['submit','loginTab','registerTab'])$(id).disabled=true;$('notice').textContent='';
+  try{
+    const res=await fetch(registering?'/auth/setup':'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({username:$('username').value.trim(),password:$('password').value}),signal:AbortSignal.timeout(15000)});
+    const data=await res.json();
+    if(!res.ok){
+      if(res.status===409){busy=false;await initialize();}
+      throw Error(typeof data.detail==='string'?data.detail:'输入格式不符合要求，请检查账号和密码。');
+    }
+    $('password').value='';$('confirmation').value='';location.replace(next);
+  }catch(exc){$('notice').textContent=exc.name==='TimeoutError'?'连接超时，请稍后重试。':exc.message||'连接失败，请稍后重试。';}
+  finally{busy=false;for(const id of ['submit','loginTab','registerTab'])$(id).disabled=false;}
+});
+window.addEventListener('pageshow',e=>{if(e.persisted)initialize();});initialize();})();
+</script></body></html>

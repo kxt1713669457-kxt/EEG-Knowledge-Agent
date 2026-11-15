@@ -1,0 +1,104 @@
+{
+  "id": "dwdanet-2a-local",
+  "name": "DWDaNet · 2a本地权重",
+  "adapter": "eeg_classifier",
+  "architecture": "dwda_multiscale_v1",
+  "description": "已训练的2a四分类单试次模型；需要数值EEG，不能直接输入波形截图。",
+  "enabled": true,
+  "input": {
+    "channels": 22,
+    "sampling_rate_hz": 250,
+    "points": 1000,
+    "unit": "V",
+    "dataset": "BCI_IV_2a",
+    "subject_scope": "原被试1留出折；其他来源属于域外输入，预测需单独验证"
+  },
+  "labels": [
+    "左手",
+    "右手",
+    "双脚",
+    "舌头"
+  ],
+  "normalization": {
+    "mean": 3.2454619503984543e-07,
+    "std": 1.1501132518593401e-05,
+    "method": "reconstructed_source_pool",
+    "note": "从当前原训练目录被试2..9的T/E数值重建全源标量mean/std；不拟合待预测单试次。不等于已保存原训练统计或重新复现原指标。"
+  },
+  "weights_sha256": "fedda5702fcb318deeaceb08e0f924edaf29166987bdd2720882c84fd577adfa",
+  "provenance": {
+    "source_file": "F:\\dwt实验\\dwdanet\\main_cross_subject_LOSO_dynamic_weight_patched.ipynb",
+    "source_sha256": "869297c08c05cc4582b4a825f41bff566bc116a03d1a62a9213dad3e8381b68a",
+    "checkpoint_file": "F:\\dwt实验\\dwdanet\\Loso_A_heads_2_depth_6_dynamic_weight\\model_1.pth",
+    "checkpoint_sha256": "f8f3a48ce51dcccae28e4a02465cccc768fd10cd48132d060f6c6b1b9ce3fe45",
+    "code_sha256": "447a526d93f9a37d9429955a86d67b73b7fee55bbb71e46c9c236c0f337f18eb",
+    "normalization_files": [
+      {
+        "file": "A02T.mat",
+        "sha256": "6362064a17d16c760102b2c9c80ee3bf5521d8db803062106d345aec638432d2"
+      },
+      {
+        "file": "A02E.mat",
+        "sha256": "19243069852dc8574b67d66e53a263d09288635a32336abb95d77df789eb3d09"
+      },
+      {
+        "file": "A03T.mat",
+        "sha256": "cbd8ae97154a6226eb9bc8e8803550c16758cc6bf5ce98814bfb9eea2de3e177"
+      },
+      {
+        "file": "A03E.mat",
+        "sha256": "a3cdafa900b9461f05143a24428937a59862b9e50016986b1e3b0a232d8d4b0e"
+      },
+      {
+        "file": "A04T.mat",
+        "sha256": "f04bfa6624466a6a913c6672956418cad21fa7494edbd958d7cb9744350f046c"
+      },
+      {
+        "file": "A04E.mat",
+        "sha256": "55f2b0c6aa8a2fbfc81c84291e0f494c72eb15182927a3256d6f667e470581bf"
+      },
+      {
+        "file": "A05T.mat",
+        "sha256": "56e0b0e6f09310fef436f91a9000864b937114978ad8acc263c3f5b5ea593e47"
+      },
+      {
+        "file": "A05E.mat",
+        "sha256": "e5ca8b0f4d0c0da3078992a35c57bec058052105e5b341e754e512adc349784b"
+      },
+      {
+        "file": "A06T.mat",
+        "sha256": "d0d5f62e9afce3c8d4fa35874c6dbf7473c7ecf165b5044ce5321bc633f28207"
+      },
+      {
+        "file": "A06E.mat",
+        "sha256": "e7a3d8e974761d64b2bfcc530c05792a30adf3b7d4eb4703cd060d617a07571a"
+      },
+      {
+        "file": "A07T.mat",
+        "sha256": "445b68b25ce255f8aae117e9928edfe53f8b83d6d1c02bb213f6b1e6eb05e8b4"
+      },
+      {
+        "file": "A07E.mat",
+        "sha256": "a71835883ceda25934ab8453f7e6d302de4aab8f727db780c4e09354bb9ca3dd"
+      },
+      {
+        "file": "A08T.mat",
+        "sha256": "9d2a4021ba612144cfaeed63406bdb1a81bb9244c276feb1c9113bd30d8cc10b"
+      },
+      {
+        "file": "A08E.mat",
+        "sha256": "cb309c1932282f182eb0c6f542d4b5f2c70b9695f790d224ff44fc4815b7a6e7"
+      },
+      {
+        "file": "A09T.mat",
+        "sha256": "1d89fe919df2cfbfdf0c7bce6d866d82a272197920d91febd4b0561fca940f7c"
+      },
+      {
+        "file": "A09E.mat",
+        "sha256": "c59086276561df65a35bd6983c3fb1cc495424ef2b7993632ee09815d2b9dd77"
+      }
+    ],
+    "conversion": "weights_only=True＋明确网络类白名单；只转存张量state_dict，未运行训练/未重新训练分类头。",
+    "variant_note": "使用原本地DWDaNet动态权重留出折网络；不冒称通用新用户准确率。"
+  }
+}

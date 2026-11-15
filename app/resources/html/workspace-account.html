@@ -1,0 +1,21 @@
+<dialog id="workspaceAccount" class="workspace-dialog account-dialog" aria-labelledby="accountTitle">
+  <button type="button" class="close-dialog" aria-label="关闭个人空间">×</button>
+  <div class="panel-overline">YOUR RESEARCH SPACE</div><h2 id="accountTitle">个人研究空间</h2>
+  <p class="account-intro">让资料、工具和每一次研究，留在自己的工作台。</p>
+  <section class="account-security"><div class="account-section-title"><span>登录账号 · <strong id="signedInUser">正在读取…</strong></span><button class="subtle-button" type="button" id="logoutAccount">退出登录</button></div><details><summary>修改密码</summary><form id="passwordForm" class="profile-form"><label>当前密码<input id="currentPassword" type="password" autocomplete="current-password" required maxlength="128"></label><label>新密码<input id="newPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128"></label><label>确认新密码<input id="confirmNewPassword" type="password" autocomplete="new-password" required minlength="10" maxlength="128"></label><div class="profile-save"><button class="subtle-button" id="savePassword" type="submit">更新密码并重新登录</button></div></form></details><p id="securityNotice" role="status" aria-live="polite"></p></section>
+  <form id="profileForm" class="profile-form">
+    <label>怎么称呼你<input id="profileName" name="name" maxlength="40" required autocomplete="nickname" disabled></label>
+    <label>身份<input id="profileRole" name="role" maxlength="60" placeholder="例如：研究生 / 算法工程师" disabled></label>
+    <label class="profile-focus">研究方向<input id="profileFocus" name="focus" maxlength="100" placeholder="运动想象 · EEG" disabled></label>
+    <div class="profile-save"><button class="subtle-button" type="submit" id="saveProfile" disabled>保存资料</button><span id="profileNotice" role="status" aria-live="polite"></span></div>
+  </form>
+  <button type="button" class="manage-models-link" data-model-settings><span>配置自己的模型、API 与实时额度</span><span aria-hidden="true">↗</span></button>
+  <details class="account-history"><summary>项目默认配置与已记录用量</summary><section class="account-service"><div class="account-section-title"><h3>默认配置与记录</h3><button class="subtle-button" type="button" id="refreshAccount">刷新</button></div>
+    <div id="accountStatus" role="status" aria-live="polite">正在读取…</div>
+    <dl class="account-models"><div><dt>对话模型</dt><dd id="accountModel">—</dd></div><div><dt>视觉模型</dt><dd id="accountVision">—</dd></div></dl>
+    <div class="quota-card"><span>API 剩余额度</span><strong id="accountQuota">暂未读取</strong><p id="quotaNotice">读取后端配置中…</p><a id="quotaConsole" target="_blank" rel="noopener noreferrer" hidden>到百炼控制台查看 ↗</a></div>
+    <div class="usage-heading">本项目已记录用量 <small>最近 30 天</small></div>
+    <div class="account-usage"><div><small>输入 token</small><strong id="usageInput">—</strong></div><div><small>输出 token</small><strong id="usageOutput">—</strong></div><div><small>合计 token</small><strong id="usageTotal">—</strong></div></div>
+    <p id="usageNotice" class="usage-note">用量不等于账户剩余额度。</p><small id="accountUpdated" class="account-updated"></small>
+  </section></details>
+</dialog>

@@ -1,0 +1,13 @@
+<dialog id="skillsManager" class="workspace-dialog library-dialog" aria-labelledby="skillsManagerTitle">
+  <header class="dialog-heading"><div><span class="panel-overline">EEG SKILLS</span><h2 id="skillsManagerTitle">模型与分析能力</h2></div><button type="button" class="icon-button" data-close-research aria-label="关闭Skills">×</button></header>
+  <p class="dialog-description">Agent按任务选择已启用的能力。数值脑电用于模型分析，图片用于识图，两类输入分开处理。</p>
+  <div id="skillsList" class="registry-list" role="list"></div>
+  <details class="skill-add-section"><summary>添加自己的 EEG skill</summary><p class="fine-print">上传清单与纯参数权重。当前支持 DWDaNet / DWTNet 适配器；新网络架构需先接入适配器，不直接执行上传的Python。</p>
+    <button type="button" class="text-button" id="downloadSkillTemplate">下载清单模板</button>
+    <form id="skillRegisterForm" class="settings-form">
+      <label class="full-field">Skill清单 · JSON<input id="skillManifestFile" type="file" accept=".json" required></label>
+      <label class="full-field">纯参数权重 · PT / PTH<input id="skillWeightFile" type="file" accept=".pt,.pth" required><small>最大32MB；须包含已训练分类头、明确标签和训练归一化参数。</small></label>
+      <div class="form-actions full-field"><button type="submit" class="btn" id="addEEGSkill">校验并添加</button><span id="skillRegisterStatus" role="status"></span></div>
+    </form>
+  </details>
+</dialog>

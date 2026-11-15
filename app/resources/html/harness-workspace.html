@@ -1,0 +1,80 @@
+<dialog id="modelSettings" class="workspace-dialog settings-dialog" aria-labelledby="modelSettingsTitle">
+  <header class="dialog-heading"><div><span class="panel-overline">CONNECTIONS</span><h2 id="modelSettingsTitle">模型与 API</h2></div><button type="button" class="icon-button" data-close-dialog aria-label="关闭模型设置">×</button></header>
+  <p class="dialog-description">使用自己的服务与模型。密钥仅保存在本机后端，发送问题时按当前选择运行。</p>
+  <div class="connection-heading"><label class="field-label">当前连接<select id="settingsConnection"></select></label><button type="button" class="subtle-button" id="useSavedConnection">用于对话</button><button type="button" class="subtle-button" id="newConnection">＋ 新增</button><button type="button" class="subtle-button danger-text" id="removeConnection">移除</button></div>
+  <form id="connectionForm" class="settings-form">
+    <label>名称<input id="connectionName" maxlength="60" required placeholder="例如：我的百炼"></label>
+    <label>供应商<select id="connectionProvider"><option value="bailian">阿里云百炼</option><option value="openai">OpenAI</option><option value="deepseek">DeepSeek</option><option value="siliconflow">硅基流动</option><option value="openrouter">OpenRouter</option><option value="custom">自定义 OpenAI 兼容接口</option></select></label>
+    <label class="full-field">API 地址<input id="connectionBase" required type="url" autocomplete="url" placeholder="https://…/v1"></label>
+    <label class="full-field">API Key<input id="connectionKey" type="password" autocomplete="new-password" placeholder="填写密钥，保存后不会回显" spellcheck="false"></label>
+    <label class="full-field">默认模型<input id="connectionDefaultModel" list="settingsModels" maxlength="200" placeholder="读取模型后选择，也可填写供应商提供的模型ID"><datalist id="settingsModels"></datalist></label>
+    <details class="advanced-settings full-field"><summary>高级兼容设置</summary><label>推理参数格式<select id="reasoningFormat"><option value="auto">按供应商识别</option><option value="none">不发送推理参数</option><option value="openai">OpenAI reasoning_effort</option><option value="qwen">Qwen enable_thinking / thinking_budget</option><option value="deepseek">DeepSeek thinking / reasoning_effort</option></select></label><p>仅在网关文档明确支持时调整。未知模型默认不发送供应商专用参数。</p></details>
+    <div class="form-actions full-field"><button class="btn" id="saveConnection" type="submit">保存连接</button><button class="subtle-button" id="fetchModels" type="button">读取可用模型</button><span id="connectionNotice" role="status" aria-live="polite"></span></div>
+  </form>
+  <section class="live-quota"><div class="account-section-title"><h3 id="liveQuotaTitle">供应商实时额度</h3><button type="button" id="refreshQuota" class="subtle-button">刷新额度</button></div><div id="liveQuotaResult" role="status">选择连接后查询。未授权或供应商不支持时，明确显示状态。</div><div class="quota-actions"><button type="button" id="authorizeQuota" class="subtle-button" hidden>登录百炼并授权查询</button><a id="quotaAuthorizationLink" target="_blank" rel="noopener noreferrer" hidden>打开百炼官方授权页面 ↗</a><button id="cancelQuotaAuthorization" type="button" class="text-button" hidden>取消授权</button></div><p id="quotaAuthStatus" role="status"></p><small>百炼显示所授权账号的模型免费 token，DeepSeek显示账户余额。账户余额、免费额度与本项目调用用量分别统计；打开本面板时每30秒刷新一次。</small></section>
+</dialog>
+
+<dialog id="sampleManager" class="workspace-dialog library-dialog" aria-labelledby="sampleManagerTitle">
+  <header class="dialog-heading"><div><span class="panel-overline">EEG SAMPLES</span><h2 id="sampleManagerTitle">样本登记</h2></div><button type="button" class="icon-button" data-close-dialog aria-label="关闭样本登记">×</button></header>
+  <p class="dialog-description">用于单试次分析的数值波形，与知识库论文分开管理。登记后核验输入条件，发送分析任务时才会运行模型。</p>
+  <p class="fine-print">还没有切好的试次？<button type="button" class="subtle-button" data-mi-preprocessing>运动想象预处理 ↗</button> 从原始记录生成可追溯的模型输入。</p>
+  <form id="sampleRegisterForm" class="settings-form">
+    <label class="full-field">样本文件<input id="sampleFile" type="file" accept=".mat,.npy,.npz" required><small>MAT / NPZ须含 data 数组；NPY为数值数组。维度为 [试次, 通道, 采样点]，也可提供一个 [通道, 采样点] 试次；最大128MB。</small></label>
+    <label>采样率 · Hz<input id="sampleRate" type="number" min="1" max="100000" value="250" required></label>
+    <label>信号单位<select id="sampleUnit" required><option value="">请选择文件实际单位</option><option value="V">V · 伏</option><option value="uV">µV · 微伏</option></select></label>
+    <label class="full-field">数据集名称<input id="sampleDataset" maxlength="100" placeholder="例如：BCI IV 2a · 我的实验"></label>
+    <div class="form-actions full-field"><button class="btn" id="registerSample" type="submit">校验并登记</button><span id="sampleRegisterNotice" role="status" aria-live="polite"></span></div>
+  </form>
+  <div class="section-heading"><h3>样本目录</h3><button id="refreshSamples" type="button" class="subtle-button">刷新</button></div>
+  <p class="fine-print">当前适配器接受22通道、250Hz、每试次1000点；其他形状可登记为“需适配”，不会自动补通道，也不会生成未经训练的分类结果。</p>
+  <div id="sampleRegistryList" class="registry-list" role="list"></div>
+</dialog>
+
+<dialog id="miPreprocessing" class="workspace-dialog library-dialog" aria-labelledby="miPreprocessingTitle">
+  <header class="dialog-heading"><div><span class="panel-overline">MOTOR IMAGERY</span><h2 id="miPreprocessingTitle">运动想象预处理</h2></div><button type="button" class="icon-button" data-close-dialog aria-label="关闭运动想象预处理">×</button></header>
+  <p class="dialog-description">从连续原始 EEG 提取运动想象试次，或按原协议划分 SHU-MI 已分段会话。保留原模型处理协议作为基线；其他方案用于研究比较，不保证提高分类率。</p>
+  <p id="miResourceNote" class="fine-print">一次处理一个记录，默认最多32个试次。处理参数、质量变化和原始事件对应关系随结果保存。</p>
+  <form id="miRecordingForm" class="settings-form">
+    <label class="full-field">原始记录<input id="miRecordingFile" type="file" accept=".gdf,.edf,.bdf,.fif,.npz" required><small id="miRecordingFileHint">GDF / EDF / BDF / FIF，或包含连续信号与事件的 NPZ；已切好的 MAT / NPY 请使用“样本登记”。</small></label>
+    <label class="full-field">数据集协议<select id="miDataset"><option value="BCI_IV_2a">BCI IV 2a · 22通道四分类</option><option value="BCI_IV_2b">BCI IV 2b · 3通道二分类</option><option value="SHU_MI">SHU-MI · 同一被试5个会话MAT</option><option value="MI_GENERIC">其他运动想象数据 · 明确事件与通道</option></select></label>
+    <label id="miShuSplitField" class="full-field" hidden>SHU-MI 原协议划分<select id="miShuSplit"><option value="shu-session1to4-vs5-v1">会话1–4训练 / 会话5测试</option><option value="shu-mixed-session-stratified70-v1">混合会话 · 按类别分层70%训练</option></select><small>五份同一被试 session MAT 已切段（250 Hz、µV），不再按提示事件切段。标签只用于划分与导出，不进入分类模型输入。</small></label>
+    <details id="miMetadataField" class="advanced-settings full-field"><summary>事件与通道补充信息 · JSON</summary><p class="fine-print">仅在文件元信息不足时填写；字段以服务端协议为准，不会按文件名猜测事件、单位或通道。</p><label>补充元信息<textarea id="miMetadata" rows="4" spellcheck="false" placeholder="{}">{}</textarea></label></details>
+    <div class="form-actions full-field"><button id="miUploadRecording" class="btn" type="submit">核验并登记原始记录</button><span id="miUploadNotice" role="status" aria-live="polite"></span></div>
+  </form>
+  <form id="miPreprocessForm" class="settings-form">
+    <label class="full-field">已登记原始记录<select id="miRecordingSelect" required><option value="">读取目录后选择</option></select></label>
+    <p id="miRecordingInfo" class="fine-print full-field"></p>
+    <label class="full-field">处理方案<select id="miProfileSelect" required><option value="">读取可用方案</option></select></label>
+    <p id="miProfileInfo" class="fine-print full-field"></p>
+    <label><span id="miTrialsLabel">本次最多提取试次</span><input id="miMaxTrials" type="number" min="1" max="288" step="1" value="32" required></label>
+    <div class="form-actions full-field"><button id="miRunPreprocessing" class="btn" type="submit" disabled>执行预处理</button><button id="miRefreshCatalog" class="subtle-button" type="button">刷新目录</button><span id="miRunNotice" role="status" aria-live="polite"></span></div>
+  </form>
+  <div class="settings-form mi-artifact-history">
+    <label class="full-field">已有预处理产物<select id="miArtifactSelect"><option value="">刷新目录后选择</option></select></label>
+    <div class="form-actions full-field"><button id="miReadArtifact" class="subtle-button" type="button" disabled>查看已有产物</button><button id="miRefreshArtifacts" class="subtle-button" type="button">刷新产物目录</button><span id="miArtifactNotice" role="status" aria-live="polite"></span></div>
+    <p class="fine-print full-field">请求超时或页面关闭后，可在这里查找已完成结果。读取已有产物不会重新执行预处理或分类。</p>
+  </div>
+  <section id="miResult" hidden aria-labelledby="miResultTitle">
+    <h3 id="miResultTitle">处理产物</h3><p id="miResultSummary"></p>
+    <p class="fine-print">派生样本已进入现有样本目录。输入形状匹配仅表示可送入适配器，分类效果仍须单独验证。</p>
+    <div id="miQualityComparison" class="mi-quality-comparison"></div><div id="miWarnings" role="status"></div>
+    <p id="miResultScope" class="fine-print"></p>
+    <div class="form-actions"><button id="miUseSample" class="btn" type="button">在样本面板中选择</button><button id="miDownloadData" class="subtle-button" type="button">下载试次 NPZ</button><button id="miDownloadReport" class="subtle-button" type="button">下载处理报告 JSON</button></div>
+    <div id="miSplitDownloads" hidden><p class="fine-print">原协议训练集、测试集保留 µV 与划分标签；预览样本另转换为 V。这里只完成处理与导出，未训练或运行32通道分类模型。</p><div class="form-actions"><button id="miDownloadTrain" class="subtle-button" type="button">下载原协议训练集 MAT</button><button id="miDownloadTest" class="subtle-button" type="button">下载原协议测试集 MAT</button></div></div>
+    <details><summary>完整参数与质量记录</summary><pre id="miReportDetails" class="mi-report-details"></pre></details>
+  </section>
+  <details class="mi-methods"><summary>方法来源与适用条件</summary><div id="miMethodsList"></div></details>
+</dialog>
+
+<dialog id="folderWorkspace" class="workspace-dialog folder-dialog" aria-labelledby="folderWorkspaceTitle">
+  <header class="dialog-heading"><div><span class="panel-overline">WORKING CONTEXT</span><h2 id="folderWorkspaceTitle">工作文件夹</h2></div><button type="button" class="icon-button" data-close-dialog aria-label="关闭工作文件夹">×</button></header>
+  <p class="dialog-description">选择一个文件夹，预览资料并勾选本轮要用的文件。读取的是你选中的快照，不会运行其中的代码。</p>
+  <div class="folder-toolbar"><select id="workingFolderSelect" aria-label="工作文件夹"><option value="">尚未选择文件夹</option></select><button type="button" class="subtle-button" id="pickWorkingFolder">选择文件夹…</button></div>
+  <input id="workingFolderInput" type="file" webkitdirectory multiple hidden>
+  <p id="folderStatus" class="fine-print" role="status">支持文本、Markdown、PDF、Word等研究资料；EEG数组请使用“样本登记”。</p>
+  <div class="folder-content"><div class="folder-tree"><div class="folder-selection-bar"><span id="folderSelectedCount">未选择资料</span><button type="button" class="text-button" id="selectFolderFiles">选择前8份</button><button type="button" class="text-button" id="clearFolderFiles">清空</button></div><div id="workingFileTree" role="list"><div class="empty-state">从自己的研究文件夹开始。</div></div></div><section class="file-preview"><h3 id="previewFileTitle">文件预览</h3><pre id="previewFileText">点击文件名查看正文。最多选择8份文件作为本轮依据，较长文件按问题提取相关窗口。</pre><a id="previewFileOriginal" target="_blank" rel="noopener noreferrer" hidden>打开原文件 ↗</a></section></div>
+  <div class="form-actions folder-footer"><span class="fine-print">资料会随本轮发送给所选模型；不会自动加入长期知识库。</span><button type="button" class="btn" id="useFolderFiles">用于本轮</button></div>
+</dialog>
+
+<dialog id="workspaceEdit" class="workspace-dialog edit-dialog" aria-labelledby="workspaceEditTitle"><header class="dialog-heading"><h2 id="workspaceEditTitle">编辑</h2><button type="button" class="icon-button" data-close-dialog aria-label="关闭编辑">×</button></header><form id="workspaceEditForm"><label id="workspaceEditLabel" class="field-label">名称<input id="workspaceEditValue" maxlength="80" required></label><label id="workspaceMoveLabel" class="field-label" hidden>项目文件夹<select id="workspaceMoveProject"></select></label><div class="form-actions"><button type="button" class="subtle-button" data-close-dialog>取消</button><button type="submit" class="btn" id="workspaceEditSave">保存</button></div><p id="workspaceEditNotice" role="status"></p></form></dialog>
+<div id="workspaceToast" class="workspace-toast" role="status" aria-live="polite" hidden></div>

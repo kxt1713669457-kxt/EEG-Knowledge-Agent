@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/wjq-learning/CBraMod",
+  "revision": "b9e961003214326972c567eff390e75b0287e32a",
+  "license": "MIT",
+  "files": ["models/cbramod.py", "models/criss_cross_transformer.py"],
+  "local_modification": "cbramod.py imports .criss_cross_transformer instead of models.criss_cross_transformer; architecture unchanged",
+  "weights_repository": "https://huggingface.co/weighting666/CBraMod",
+  "weights_revision": "500543c7e30bda1b22bfd51a49301b238dee21fd",
+  "weights_license": "apache-2.0",
+  "weights_sha256": "0792cb808c14e6b7a2bb2ce1dff379bc47bc54c49a779825bdfeb33bf8157178",
+  "task_head": "not_provided"
+}

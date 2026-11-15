@@ -1,0 +1,10 @@
+请从以下信息中识别文档的主要知识主体，例如论文标题、EEG模型、数据集、算法、评估方法或产品名称：
+文件名：{file_title}
+
+正文切片（用于辅助识别）：
+{context}
+
+要求：
+1. 保留原文中的准确名称，例如EEGNet、BCI Competition IV 2b、moabb.evaluations.WithinSessionEvaluation；不要把EEG知识主体强行改写成商品。
+2. 返回结果只包含一个主体名称，不添加解释、引号或其他内容。
+3. 如果正文无法确定主要主体，返回空字符串，由程序用文件名兜底。
