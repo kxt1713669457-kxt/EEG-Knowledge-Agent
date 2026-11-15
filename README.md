@@ -4,19 +4,45 @@
 
 ## 界面预览
 
-以下截图来自 2026 年 11 月 12 日的界面验收，展示移动端视图和示例数据；功能是否可用取决于本地配置与模型文件。
+以下为项目开发与验收期间的实际截图：桌面端截图拍摄于 2026 年 11 月 5–6 日，移动端截图拍摄于 11 月 12 日。展示数据和能力随本地配置而变化。
 
-**脑电数据登记**：在研究对话中登记样本，并查看数据形状、采样率与适配情况。
+### 研究工作台
 
-![脑电数据登记](docs/screenshots/eeg-registration.jpg)
+桌面端工作台展示对话模式、研究内容、结果及单试次分析入口。
 
-**Agent 研究**：基于已登记的样本执行模型分析并查看结果。
+![桌面研究工作台](docs/screenshots/desktop-workbench.png)
 
-![Agent 模型分析](docs/screenshots/agent-inference.jpg)
+### 资料上传与知识库
 
-**预处理 Skills**：查看模型对应的预处理能力与适用条件。
+上传 PDF、DOCX 或 Markdown，跟踪资料解析、索引与入库状态。
 
-![预处理能力](docs/screenshots/preprocessing-skills.jpg)
+![资料上传与知识库](docs/screenshots/desktop-import.jpg)
+
+### Skills 模型与分析能力
+
+查看模型与分析能力、适用条件及启用状态。11 月 12 日版本还增加了预处理 Skills，见下方移动端截图。
+
+![模型与分析 Skills](docs/screenshots/desktop-skills.jpg)
+
+### 用户登录
+
+通过研究账号进入个人研究空间。
+
+![用户登录](docs/screenshots/desktop-login.png)
+
+### 模型与 API 设置
+
+管理模型连接和服务配置。
+
+![模型与 API 设置](docs/screenshots/desktop-model-settings.jpg)
+
+### 移动端：样本登记、Agent 分析与预处理
+
+11 月 12 日验收截图展示脑电样本登记、模型分析和预处理能力。
+
+| 脑电数据登记 | Agent 模型分析 | 预处理 Skills |
+| --- | --- | --- |
+| ![脑电数据登记](docs/screenshots/eeg-registration.jpg) | ![Agent 模型分析](docs/screenshots/agent-inference.jpg) | ![预处理 Skills](docs/screenshots/preprocessing-skills.jpg) |
 
 ## 功能
 
