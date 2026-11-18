@@ -16,10 +16,6 @@ _models, _guard = {}, Lock()
 
 def load_network(skill, *, weights=None):
     import torch
-    if skill["architecture"] == "dwda_multiscale_v1":
-        from .vendor.local_dwdanet import EEGTransformer
-    else:
-        from .vendor.local_dwtnet import EEGTransformer
     channels = skill["input"]["channels"]
     if weights is None:
         path = manager.WEIGHT_ROOT / skill["id"] / "weights.pt"
@@ -28,6 +24,13 @@ def load_network(skill, *, weights=None):
         weights = torch.load(path, map_location="cpu", weights_only=True)
     if not isinstance(weights, dict) or not weights or not all(isinstance(v, torch.Tensor) for v in weights.values()):
         raise ValueError("只接受纯张量state_dict。")
+    if skill["architecture"] == "openbmi_csp_lda_v1":
+        from .openbmi import OpenBMICspLda
+        return OpenBMICspLda(weights)
+    if skill["architecture"] == "dwda_multiscale_v1":
+        from .vendor.local_dwdanet import EEGTransformer
+    else:
+        from .vendor.local_dwtnet import EEGTransformer
     candidate = EEGTransformer(heads=2, emb_size=16, depth=6, database_type={22:"A",3:"B",32:"C"}[channels],
         eeg1_f1=8, eeg1_D=2, eeg1_kernel_size=(32,64,128), eeg1_pooling_size1=8,
         eeg1_pooling_size2=8, eeg1_dropout_rate=.25, flatten_eeg1=240)
@@ -59,6 +62,11 @@ def analyze_sample(sample_id, trial_index, model_id):
         if type(trial_index) is not int or not 0 <= trial_index < len(data): raise ValueError("试次下标越界。")
         trial = np.asarray(data[trial_index], dtype=np.float32)
         if not np.isfinite(trial).all(): raise ValueError("波形含非有限数值。")
+        openbmi = skill["architecture"] == "openbmi_csp_lda_v1"
+        if openbmi and (entry["dataset_id"] != contract["dataset"]
+                        or entry.get("preprocessing_profile_id") != "mi-native-cue4s-v1"
+                        or entry.get("channel_names") != skill["provenance"]["channel_names"]):
+            raise ValueError("OpenBMI requires its native cue preprocessing and the training channel order.")
         if entry["unit"] == "uV": trial = trial / 1_000_000
         norm = skill["normalization"]
         tensor = np.ascontiguousarray((trial - norm["mean"]) / norm["std"], dtype=np.float32)[None,None]
@@ -82,7 +90,7 @@ def analyze_sample(sample_id, trial_index, model_id):
         "model":{"model_id":model_id,"name":skill["name"],"category":"trained_eeg_classifier","weights_sha256":skill["weights_sha256"],
                  "weights_revision":skill["weights_sha256"],"classification_head_available":True,"device":"cpu","precision":"float32"},
         "preprocessing":{"input_shape":list(tensor.shape),"profile_id":model_id,"normalization":norm,
-                         "unit_conversion":"uV输入换为V；沿用已分段4秒原始顺序；不使用标签/不拟合此试次"},
+                         "unit_conversion":norm["note"] if openbmi else "uV输入换为V；沿用已分段4秒原始顺序；不使用标签/不拟合此试次"},
         "output":{"prediction":skill["labels"][index],"class_index":index,"classification_available":True,
                   "confidence":None,"softmax_score":float(scores[index]),"score_calibrated":False,
                   "class_scores":[{"label":label,"score":float(score)} for label,score in zip(skill["labels"],scores)],

@@ -70,7 +70,9 @@ def model_catalog():
     from app.agent.skills import manager
     models = manager.catalog()
     for sample in samples:
-        sample['compatible_model_ids'] = [m['id'] for m in models if m.get('enabled') and m.get('ready') and sample.get('available') and sample.get('shape') and sample['shape'][1:]==[m['input']['channels'],m['input']['points']] and sample['sampling_rate_hz']==m['input']['sampling_rate_hz']]
+        sample['compatible_model_ids'] = [m['id'] for m in models if m.get('enabled') and m.get('ready') and sample.get('available') and sample.get('shape') and sample['shape'][1:]==[m['input']['channels'],m['input']['points']] and sample['sampling_rate_hz']==m['input']['sampling_rate_hz']
+            and (m.get('architecture') != 'openbmi_csp_lda_v1' or
+                 (sample.get('dataset_id') == 'OPENBMI_MI' and sample.get('preprocessing_profile_id') == 'mi-native-cue4s-v1'))]
         sample['compatible'] = bool(sample['compatible_model_ids'])
     return {"models": [{"model_id": MODEL_ID, "category": "pretrained_eeg_encoder", "classification_available": False,
         "weights_revision": MODEL_REVISION, "input_shape": [1,22,4,200], "output": "真实表征及统计，不是类别/置信度",

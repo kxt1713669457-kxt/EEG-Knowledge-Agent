@@ -17,9 +17,9 @@ WEIGHT_ROOT = PROJECT_ROOT / "models/eeg/local-skills"
 
 class SignalContract(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    channels: Literal[3, 22, 32]
-    sampling_rate_hz: Literal[250] = 250
-    points: Literal[1000] = 1000
+    channels: Literal[3, 22, 32, 62]
+    sampling_rate_hz: Literal[250, 1000] = 250
+    points: Literal[1000, 4000] = 1000
     unit: Literal["V"] = "V"
     dataset: str = Field(min_length=1, max_length=100)
     subject_scope: str = Field(default="用户登记模型，适用域需另行验证。", max_length=300)
@@ -46,7 +46,7 @@ class SkillManifest(BaseModel):
     id: str = Field(pattern=r"^[a-z][a-z0-9-]{2,63}$")
     name: str = Field(min_length=1, max_length=80)
     adapter: Literal["eeg_classifier"] = "eeg_classifier"
-    architecture: Literal["dwda_multiscale_v1", "dwt_multiscale_v4"]
+    architecture: Literal["dwda_multiscale_v1", "dwt_multiscale_v4", "openbmi_csp_lda_v1"]
     description: str = Field(min_length=1, max_length=1000)
     enabled: bool = True
     input: SignalContract
@@ -58,6 +58,15 @@ class SkillManifest(BaseModel):
 
     @model_validator(mode="after")
     def label_contract(self):
+        dimensions = (self.input.channels, self.input.sampling_rate_hz, self.input.points)
+        if self.architecture == "openbmi_csp_lda_v1":
+            names = self.provenance.get("channel_names")
+            if dimensions != (62, 1000, 4000) or self.input.dataset != "OPENBMI_MI":
+                raise ValueError("OpenBMI requires 62 channels, 1000 Hz, and 4000 points.")
+            if not isinstance(names, list) or len(names) != 62 or not all(isinstance(n, str) for n in names) or len(set(names)) != 62:
+                raise ValueError("OpenBMI requires a unique ordered channel list.")
+        elif self.input.channels == 62 or dimensions[1:] != (250, 1000):
+            raise ValueError("Legacy networks require 250 Hz and 1000 points.")
         if len(self.labels) != (4 if self.input.channels == 22 else 2):
             raise ValueError("分类标签数量与已支持的网络头不匹配。")
         if len(set(self.labels)) != len(self.labels) or any(not v.strip() or len(v) > 40 for v in self.labels):
@@ -131,6 +140,8 @@ def register_skill(manifest_text, stream):
     manifest = SkillManifest.model_validate_json(manifest_text)
     if manifest.id == "cbramod-pretrained" or manifest.id in all_entries():
         raise ValueError("skill ID已存在，请使用新ID；已有产物保持原模型版本。")
+    if manifest.architecture == "openbmi_csp_lda_v1":
+        raise ValueError("OpenBMI CSP + LDA is provisioned through the local catalog.")
     blob = stream.read(32 * 1024 * 1024 + 1)
     if not blob or len(blob) > 32 * 1024 * 1024:
         raise ValueError("纯参数权重须在32MB以内。")

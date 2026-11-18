@@ -69,7 +69,7 @@ class InspectEEGAttachmentInput(StrictInput):
 
 class RegisterEEGRecordingInput(StrictInput):
     attachment_ids: Annotated[list[Annotated[str, Field(pattern=r"^[0-9a-f]{32}$")]], Field(min_length=1, max_length=5)]
-    dataset_id: Literal["BCI_IV_2a", "BCI_IV_2b", "MI_GENERIC", "SHU_MI"]
+    dataset_id: Literal["BCI_IV_2a", "BCI_IV_2b", "MI_GENERIC", "SHU_MI", "OPENBMI_MI"]
     metadata: dict[str, JsonValue] = Field(default_factory=dict)
     split_id: str | None = Field(default=None, max_length=64)
 

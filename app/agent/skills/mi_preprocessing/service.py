@@ -29,7 +29,7 @@ MAX_FILE_BYTES = 128 * 1024**2
 MAX_SIGNAL_BYTES = 256 * 1024**2
 MAX_OUTPUT_BYTES = 96 * 1024**2
 MAX_TRIALS = 288
-DATASETS = {"BCI_IV_2a", "BCI_IV_2b", "MI_GENERIC", "SHU_MI"}
+DATASETS = {"BCI_IV_2a", "BCI_IV_2b", "MI_GENERIC", "SHU_MI", "OPENBMI_MI"}
 EXTENSIONS = {".gdf", ".edf", ".bdf", ".fif", ".npz"}
 _execution_lock = Lock()
 
@@ -238,7 +238,10 @@ def _open(path, dataset_id, metadata):
     if not len(picks) or expected and len(picks) != expected:
         raw.close()
         raise ValueError("EEG通道数与数据集不符；必须显式区分EEG/EOG，不自动补通道。")
-    codes = metadata.get("cue_event_codes") or ([769, 770, 783] if dataset_id == "BCI_IV_2b" else [769, 770, 771, 772, 783])
+    if dataset_id == "OPENBMI_MI" and (len(picks) != 62 or raw.info["sfreq"] != 1000):
+        raw.close()
+        raise ValueError("OpenBMI requires 62 EEG channels and 1000 Hz.")
+    codes = metadata.get("cue_event_codes") or ([1, 2] if dataset_id == "OPENBMI_MI" else [769, 770, 783] if dataset_id == "BCI_IV_2b" else [769, 770, 771, 772, 783])
     events = events[np.isin(events[:, 2], codes)]
     if not len(events):
         raw.close()

@@ -396,7 +396,7 @@ mi-native-mu-beta-v1、mi-native-broadband-v1用于明确请求原生采样率�
     if attachment_rows or re.search(r"EEG|脑电|预处理|推理|运动想象", query, re.I):
         from app.agent.skills.manager import workflow_instructions
         instruction += "\nEEG技能工作流：" + workflow_instructions()
-    instruction += """\n有本轮附件时，使用register_eeg_recording登记连续数据（attachment_ids、dataset_id、metadata；SHU五个附件还需split_id），然后preprocess_eeg_recording用registration_step_id绑定登记步骤；需要推理再用analyze_preprocessed_eeg绑定预处理步骤。已切段样本使用register_eeg_sample，再用analyze_eeg_sample的registration_step_id绑定。仅登记意图不执行预处理或推理。无数据集信息时样本使用MI_GENERIC并明确说明数据集未知。绝不猜未来ID、采样率、单位或2a/2b；依据用户明确提供的信息或实际头信息，缺少必需信息时仅用inspect_eeg_attachment检查附件，回答中明确请求用户补充采样率、单位或数据集等必要字段。不得用旧目录数据代替本轮附件。"""
+    instruction += """\nOpenBMI连续NPZ登记为OPENBMI_MI，使用mi-native-cue4s-v1，随后可用openbmi-s01-csp-lda识别（适用范围为受试者01第1会话）。有本轮附件时，使用register_eeg_recording登记连续数据（attachment_ids、dataset_id、metadata；SHU五个附件还需split_id），然后preprocess_eeg_recording用registration_step_id绑定登记步骤；需要推理再用analyze_preprocessed_eeg绑定预处理步骤。已切段样本使用register_eeg_sample，再用analyze_eeg_sample的registration_step_id绑定。仅登记意图不执行预处理或推理。无数据集信息时样本使用MI_GENERIC并明确说明数据集未知。绝不猜未来ID、采样率、单位或2a/2b；依据用户明确提供的信息或实际头信息，缺少必需信息时仅用inspect_eeg_attachment检查附件，回答中明确请求用户补充采样率、单位或数据集等必要字段。不得用旧目录数据代替本轮附件。"""
     from app.workspace.media import selected_images
     instruction += "\n本轮上传图片索引：" + json.dumps([{k:row[k] for k in ("id","name","width","height")} for row in selected_images()],ensure_ascii=False)
     instruction += "\n图片问题可先用inspect_uploaded_image(image_id,question)观察，只有图片时不虚构数值样本ID。不需要论文时可仅识图，不强行加RAG。"
